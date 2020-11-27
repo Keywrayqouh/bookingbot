@@ -99,7 +99,6 @@ Route::get($route."/paging/{recipientId}/{message}/{surveyMode}","IlinyaControll
 Route::get($route."/reminder/{recipientId}/{message}/{surveyMode}","IlinyaController@reminder");
 Route::get($route."/image","IlinyaController@createImage");
 Route::get($route."/test/{size}","IlinyaController@test");
-Route::get($route."/message_summaries","IlinyaController@messageSummaries")
 
 $route = env('PACKAGE_ROUTE', '').'/authenticate';
 Route::resource($route, 'AuthenticateController', ['only' => ['index']]);
@@ -166,6 +165,10 @@ Route::post($route.'/retrieve', "GoogleSheetController@retrieve");
 Route::post($route.'/update', "GoogleSheetController@update");
 Route::post($route.'/delete', "GoogleSheetController@delete");
 Route::post($route.'/googleTest', "SheetController@fetch");
+
+
+Route::get("message_summaries","SummaryController@summaryOfMessages");
+
 
 /**
  * @Webview Routes

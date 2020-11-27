@@ -58,10 +58,10 @@
             </div>
             <div class="mt-3">
               <b class="font-weight-normal google_sheet_label">Google Sheet Page:</b>
-              <input class="form-control">
+              <input class="form-control"  type="number" v-model="sheetPage">
             </div>
             <div class="mt-5 text-center mb-2">
-              <button type="button" class="btn btn-info sheet_submit_button">
+              <button type="button" class="btn btn-info sheet_submit_button" @click="save">
                 Submit
               </button>
             </div>
@@ -74,10 +74,14 @@
 <script>
 import AttachmentList from './AttachmentList'
 import UploadIcon from './UploadIcon'
+import AUTH from 'src/services/auth'
+
 export default {
   name: 'Attachment',
   data() {
     return {
+      user: AUTH.user,
+      sheetPage: null,
       tempAttachments: [],
       attachments: [{}],
       pickerApiLoaded: false,
@@ -98,6 +102,24 @@ export default {
     document.head.appendChild(gDrive)
   },
   methods: {
+    save(){
+      $('#loading').css({display: 'block'})
+      if(this.sheetPage !== null){
+        let parameter = {
+          account_id: this.user.userID,
+          file_name: this.attachments[0].title,
+          fie_id: this.attachments[0]._id,
+          sheet_page: this.sheetPage
+        }
+        this.APIRequest('create', parameter).then(response => {
+          $('#loading').css({display: 'none'})
+        })
+      .catch(err => console.log(err))
+        console.log(parameter)
+      }else{
+        console.log('Required Inpt Field')
+      }
+    },
     // function called on click of drive icon
     async driveIconClicked() {
       console.log('Clicked')
